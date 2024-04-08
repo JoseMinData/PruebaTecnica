@@ -1,0 +1,235 @@
+{
+	"info": {
+		"_postman_id": "a8f12221-bb43-4c9d-812e-50a7bc49bc98",
+		"name": "Mindata",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27724184"
+	},
+	"item": [
+		{
+			"name": "Caso 1 - Validar Sign Up",
+			"item": [
+				{
+					"name": "Sign Up",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randomUsername = Math.random().toString(36).substr(2,5);\r",
+									"pm.environment.set(\"randomUsername\",\"Username \" + randomUsername);\r",
+									"\r",
+									"let randomPassword = Math.random().toString(36).substr(2,5);\r",
+									"pm.environment.set(\"randomPassword\",\"Password \" + randomPassword);\r",
+									"\r",
+									"var Test = () => {\r",
+									"\r",
+									"pm.test(\"Comprobar sí el codigo del estatus es 200\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Comprobar sí el tiempo de respuesta es menor a 6s\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+									"});\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"Test\",Test.toString());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(pm.environment.get(\"Test\"))();\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"username\": \"{{randomUsername}}\",\r\n    \"password\": \"{{randomUsername}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Caso 2 - Validar Login",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(pm.environment.get(\"Test\"))();\r",
+									"\r",
+									"\r",
+									"pm.test(\"Comprobar si la respuesta contiene Auth_token\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Auth_token\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"username\": \"{{randomUsername}}\",\r\n    \"password\": \"{{randomUsername}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Caso 3- Crear un usuario existente",
+			"item": [
+				{
+					"name": "Sign Up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(pm.environment.get(\"Test\"))();\r",
+									"\r",
+									"pm.test(\"Comprobar si la respuesta contiene This user already exist\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"This user already exist\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"username\": \"Test\",\r\n    \"password\": \"Test\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/signup",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"signup"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Caso 4 - Login de un usuario inexistente",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(pm.environment.get(\"Test\"))();\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.test(\"Comprobar si la respuesta contiene User does not exist\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"User does not exist\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"username\": \"Test08042024\",\r\n    \"password\": \"{{randomUsername}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/login",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
